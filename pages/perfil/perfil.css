@@ -1,0 +1,196 @@
+/* ESTILOS ESPECÍFICOS PARA A PÁGINA DE PERFIL */
+
+.hero {
+  background: linear-gradient(to right, rgba(166, 40, 40, 0.9), rgba(166, 40, 40, 0.7)), url(https://placehold.co/1920x1080/444/fff?text=Perfil+de+Utilizador) no-repeat center center/cover;
+  padding: 60px 40px;
+  text-align: center;
+  color: white;
+}
+.hero-text h1 { font-size: 3rem; font-weight: 700; margin-bottom: 10px; }
+.hero-text p { font-size: 1.1rem; max-width: 600px; margin: 0 auto; opacity: 0.9; }
+
+.content-section { padding: 60px 20px; }
+.main-card {
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 40px 50px;
+  max-width: 900px;
+  margin: 0 auto;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  border-top: 5px solid #a62828;
+}
+
+/* Novo Estilo para Display de Saldo */
+.display-group {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.display-title {
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+.input-display {
+    background-color: #e9ecef;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 20px;
+    max-width: 280px;
+    margin: 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    cursor: not-allowed;
+}
+.input-display i {
+    color: #a62828;
+    font-size: 1.2rem;
+}
+.input-display input:disabled {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #6c757d;
+    letter-spacing: 2px;
+    padding: 0;
+    width: auto;
+    text-align: left;
+    cursor: not-allowed;
+}
+
+
+.step { border-bottom: 1px solid #eee; padding-bottom: 30px; margin-bottom: 30px; }
+.step:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.step-header { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
+.step-icon { background-color: #a62828; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+.step-title { font-size: 1.8rem; font-weight: 600; color: #333; }
+.step-description { color: #666; margin-left: 55px; margin-bottom: 25px; }
+
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+.input-group.full-width { grid-column: 1 / -1; }
+
+.input-group { position: relative; }
+.input-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #aaa; z-index: 2;}
+.input-group input { width: 100%; padding: 12px 15px 12px 50px; border: 1px solid #ddd; border-radius: 50px; font-size: 1rem; transition: all 0.3s; }
+.input-group.password-group input { padding-right: 50px; }
+.input-group input:focus { outline: none; border-color: #a62828; box-shadow: 0 0 0 3px rgba(166, 40, 40, 0.2); }
+.input-group input:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+    color: #6c757d;
+}
+
+/* Estilos para o campo de telefone */
+.phone-group .country-code {
+    position: absolute;
+    left: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #333;
+    font-weight: 500;
+    pointer-events: none;
+    font-size: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.phone-group .phone-separator {
+    position: absolute;
+    left: 85px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ddd;
+    pointer-events: none;
+    font-size: 1.2rem;
+}
+.phone-group input {
+    padding-left: 105px;
+}
+
+/* Botão de ver senha */
+.password-toggle-btn {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 1rem;
+    padding: 0;
+    line-height: 1;
+}
+.password-toggle-btn:focus {
+    outline: none;
+}
+
+/* Mensagens de feedback */
+.form-message {
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: -15px; /* Compensa o padding-bottom do .step */
+  font-weight: 500;
+  height: 20px;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+.form-message.success {
+  color: #28a745; /* Verde */
+  opacity: 1;
+}
+.form-message.error {
+  color: #dc3545; /* Vermelho */
+  opacity: 1;
+}
+
+/* Botões */
+.action-buttons {
+  text-align: center;
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.action-btn {
+  border: none;
+  padding: 14px 40px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.action-btn.edit-btn, .action-btn.save-btn {
+  background-color: #a62828;
+  color: white;
+  box-shadow: 0 4px 15px rgba(166, 40, 40, 0.2);
+}
+.action-btn.edit-btn:hover, .action-btn.save-btn:hover {
+  background-color: #902323;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(166, 40, 40, 0.3);
+}
+
+.action-btn.cancel-btn {
+    background-color: #6c757d;
+    color: white;
+}
+.action-btn.cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Responsividade Específica */
+@media (max-width: 768px) {
+  .main-card { padding: 30px 25px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .step-title { font-size: 1.5rem; }
+  .step-description { margin-left: 0; }
+  .hero-text h1 { font-size: 2.5rem; }
+  .action-buttons { flex-direction: column; }
+}
+

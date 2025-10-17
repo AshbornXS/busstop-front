@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha - BusStop</title>
+    <link rel="stylesheet" href="esqueceuSenha.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+    <div class="brand-logo">
+        <a href="../index/index.html" class="logo-link">
+            <i class="fa-solid fa-bus"></i>
+            <h1>BusStop</h1>
+        </a>
+    </div>
+
+    <div class="forgot-password-container">
+        <form id="forgotPasswordForm" class="auth-form">
+            <h1>Recuperar Senha</h1>
+            <p class="form-description">Não se preocupe! Digite seu e-mail abaixo e enviaremos um link para você criar uma nova senha.</p>
+            <div class="input-group">
+              <i class="fa-solid fa-envelope input-icon"></i>
+              <input type="email" id="email-forgot" placeholder="Digite seu e-mail" required>
+            </div>
+            <button type="submit" class="submit-btn">Enviar Link de Recuperação</button>
+            <a href="../loginCadastro/loginCadastro.html#login" class="back-to-login">
+                <i class="fa-solid fa-arrow-left"></i> Voltar para o Login
+            </a>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email-forgot').value;
+            if (email) {
+                alert('Se o e-mail ' + email + ' estiver cadastrado, você receberá um link para redefinir sua senha em breve.');
+                this.reset();
+            }
+        });
+    </script>
+
+</body>
+</html>

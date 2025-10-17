@@ -1,0 +1,108 @@
+/* ESTILOS ESPECÍFICOS PARA A PÁGINA INDEX */
+
+/* Seção Hero */
+.hero {
+  background: linear-gradient(to right, rgba(166, 40, 40, 0.9), rgba(166, 40, 40, 0.7)), url(https://placehold.co/1920x1080/444/fff?text=Ônibus+Urbano) no-repeat center center/cover;
+  color: white;
+  padding: 100px 40px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  max-width: 700px;
+  margin: 0 auto 30px auto;
+}
+
+.hero .cta-button {
+    background-color: white;
+    color: #a62828;
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.hero .cta-button:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+/* Seção de Funcionalidades */
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 60px 40px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  padding: 40px;
+  text-align: center;
+  max-width: 320px;
+  width: 100%;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.card .icon {
+  font-size: 3rem;
+  color: #a62828;
+  margin-bottom: 20px;
+}
+
+.card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.card p {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.card .card-button {
+    background-color: #a62828;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.card .card-button:hover {
+    background-color: #902323;
+}
+
+/* Responsividade Específica */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  .hero p {
+    font-size: 1rem;
+  }
+  .features {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+

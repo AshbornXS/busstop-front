@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BusStop - Encontre sua Linha</title>
+  <link rel="stylesheet" href="../../assets/css/global.css" />
+  <link rel="stylesheet" href="linhas.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <i class="fa-solid fa-bus"></i>
+      <span>BusStop</span>
+    </div>
+    <nav>
+      <a href="../index/index.html">Home</a>
+      <div class="dropdown" id="servicos-dropdown">
+        <button class="dropdown-toggle" id="servicos-btn">
+          Serviços <i class="fa-solid fa-chevron-down"></i>
+        </button>
+        <div class="dropdown-content" id="servicos-content">
+          <a href="../recarga/recarga.html">Recarga de Cartão</a>
+          <a href="../renovacao/renovacao.html">Renovação de Cartão</a>
+        </div>
+      </div>
+      <a href="linhas.html">Linhas</a>
+    </nav>
+    <div class="right-nav">
+        <div class="user-icon-wrapper dropdown">
+          <div class="user-icon" id="user-btn">
+            <i class="fa-regular fa-user"></i>
+          </div>
+          <div class="dropdown-content" id="user-content">
+            <!-- O conteúdo aqui será inserido dinamicamente via JavaScript -->
+          </div>
+        </div>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <h1>Consulte Nossas Linhas</h1>
+        <p>Selecione uma linha abaixo para visualizar o trajeto completo.</p>
+      </div>
+    </section>
+    <section class="content-section">
+      <div class="box-linhas">
+        <h2>Visualizador de Rotas</h2>
+        <div class="container">
+          <label for="linha">Selecione a linha desejada:</label>
+          <select id="linha">
+            <option value="">Escolha uma opção</option>
+            <option value="linha1">Linha 01 - Centro / Bairro Jd. Progresso</option>
+            <option value="linha2">Linha 02 - Terminal / Shopping</option>
+            <option value="linha3">Linha 03 - Circular Universitário</option>
+            <option value="linha4">Linha 04 - Bairro / Hospital</option>
+          </select>
+          <div class="rota-container" id="rota-container">
+            <img id="rota" src="" alt="Mapa da rota do ônibus" />
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 BusStop. Todos os direitos reservados.</p>
+  </footer>
+
+  <!-- Script Global Atualizado -->
+  <script src="../../assets/js/global.js"></script>
+  <script>
+    // Script específico da página de linhas
+    document.addEventListener('DOMContentLoaded', function() {
+      const select = document.getElementById("linha");
+      const rotaContainer = document.getElementById("rota-container");
+      const img = document.getElementById("rota");
+      const rotas = {
+        linha1: "https://placehold.co/800x600/a62828/FFF?text=Rota+da+Linha+1",
+        linha2: "https://placehold.co/800x600/a62828/FFF?text=Rota+da+Linha+2",
+        linha3: "https://placehold.co/800x600/a62828/FFF?text=Rota+da+Linha+3",
+        linha4: "https://placehold.co/800x600/a62828/FFF?text=Rota+da+Linha+4"
+      };
+      select.addEventListener("change", () => {
+        const rotaEscolhida = rotas[select.value];
+        if (rotaEscolhida) {
+          img.src = rotaEscolhida;
+          rotaContainer.classList.add('visible');
+          img.onload = () => {
+            rotaContainer.scrollIntoView({ behavior: "smooth", block: "center" });
+          };
+        } else {
+          rotaContainer.classList.remove('visible');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
+
