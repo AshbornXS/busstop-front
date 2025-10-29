@@ -55,21 +55,49 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Atualiza o menu do usuário para mostrar "Login/Cadastro" ou "Meu Perfil/Sair".
+     * ATUALIZAÇÃO: Atualiza o menu do usuário para mostrar "Login/Cadastro" ou "Olá, [Nome]" e "Meu Perfil/Sair".
      */
     function updateUserMenu() {
         const userContent = document.getElementById('user-content');
-        if (!userContent) return; 
+        const rightNav = document.querySelector('.right-nav');
+        if (!userContent || !rightNav) return;
+
+        // Remove o nome de usuário existente, se houver, para evitar duplicação
+        const existingUserNameDisplay = document.getElementById('user-name-display');
+        if (existingUserNameDisplay) {
+            existingUserNameDisplay.remove();
+        }
 
         const token = localStorage.getItem('token');
+        const currentUserData = localStorage.getItem('currentUser');
 
-        if (token) {
-            // CORRIGIDO: Caminhos absolutos para evitar erros de navegação
+        if (token && currentUserData) {
+            // --- USUÁRIO LOGADO ---
+            try {
+                const currentUser = JSON.parse(currentUserData);
+                const firstName = currentUser.name.split(' ')[0];
+
+                // Cria o elemento span para o nome do usuário
+                const userNameDisplay = document.createElement('span');
+                userNameDisplay.id = 'user-name-display';
+                userNameDisplay.textContent = `Olá, ${firstName}`;
+
+                // Insere o nome antes do ícone do usuário
+                const userIconWrapper = rightNav.querySelector('.user-icon-wrapper');
+                if (userIconWrapper) {
+                    rightNav.insertBefore(userNameDisplay, userIconWrapper);
+                }
+
+            } catch (e) {
+                console.error("Erro ao processar dados do usuário:", e);
+            }
+            
             userContent.innerHTML = `
                 <a href="/pages/perfil/perfil.html">Meu Perfil</a>
                 <a href="#" id="logout-link">Sair</a>
             `;
         } else {
+            // --- USUÁRIO DESLOGADO ---
             userContent.innerHTML = `
                 <a href="/pages/loginCadastro/loginCadastro.html#login">Login</a>
                 <a href="/pages/loginCadastro/loginCadastro.html#cadastro">Cadastro</a>
@@ -115,8 +143,6 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         
         document.body.appendChild(toast);
-
-        // O CSS agora controla a remoção da notificação com a animação
     }
 
     /**

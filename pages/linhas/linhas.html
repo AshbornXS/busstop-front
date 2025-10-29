@@ -6,9 +6,10 @@
   <title>BusStop - Encontre sua Linha</title>
   <link rel="stylesheet" href="../../assets/css/global.css" />
   <link rel="stylesheet" href="linhas.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
 <body>
+  <!-- Cabeçalho Padrão -->
   <header>
     <div class="logo">
       <i class="fa-solid fa-bus"></i>
@@ -28,53 +29,73 @@
       <a href="linhas.html">Linhas</a>
     </nav>
     <div class="right-nav">
-        <div class="user-icon-wrapper dropdown">
-          <div class="user-icon" id="user-btn">
+      <div class="user-icon-wrapper dropdown">
+        <!-- ESTRUTURA CORRIGIDA -->
+        <div class="user-icon" id="user-btn">
             <i class="fa-regular fa-user"></i>
-          </div>
-          <div class="dropdown-content" id="user-content">
-            <!-- O conteúdo aqui será inserido dinamicamente via JavaScript -->
-          </div>
         </div>
+        <div class="dropdown-content" id="user-content">
+            <!-- O JS preenche aqui -->
+        </div>
+      </div>
     </div>
   </header>
+
   <main>
     <section class="hero">
       <div class="hero-text">
         <h1>Consulte Nossas Linhas</h1>
-        <p>Selecione uma linha abaixo para visualizar o trajeto completo.</p>
+        <p>Selecione uma linha abaixo para visualizar o trajeto completo e planeie a sua viagem.</p>
       </div>
     </section>
+    
     <section class="content-section">
-      <div class="box-linhas">
-        <h2>Visualizador de Rotas</h2>
-        <div class="container">
-          <label for="linha">Selecione a linha desejada:</label>
-          <select id="linha">
-            <option value="">Escolha uma opção</option>
-            <option value="linha1">Linha 01 - Centro / Bairro Jd. Progresso</option>
-            <option value="linha2">Linha 02 - Terminal / Shopping</option>
-            <option value="linha3">Linha 03 - Circular Universitário</option>
-            <option value="linha4">Linha 04 - Bairro / Hospital</option>
-          </select>
-          <div class="rota-container" id="rota-container">
-            <img id="rota" src="" alt="Mapa da rota do ônibus" />
-          </div>
+      <div class="lines-container">
+        <div class="lines-header">
+          <h2>Nossas Linhas</h2>
+          <p>Selecione uma linha para visualizar o trajeto no mapa.</p>
+        </div>
+        
+        <div class="line-cards-container">
+            <button class="line-card" data-line="linha1">
+                <span class="line-number">01</span>
+                <span class="line-name">Centro / Jd. Progresso</span>
+            </button>
+            <button class="line-card" data-line="linha2">
+                <span class="line-number">02</span>
+                <span class="line-name">Terminal / Shopping</span>
+            </button>
+            <button class="line-card" data-line="linha3">
+                <span class="line-number">03</span>
+                <span class="line-name">Circular Universitário</span>
+            </button>
+            <button class="line-card" data-line="linha4">
+                <span class="line-number">04</span>
+                <span class="line-name">Bairro / Hospital</span>
+            </button>
+        </div>
+
+        <div class="rota-container" id="rota-container">
+            <div id="rota-placeholder">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <p>O mapa da rota aparecerá aqui.</p>
+            </div>
+            <img id="rota" src="" alt="Mapa da rota do ônibus" style="display: none;" />
         </div>
       </div>
     </section>
   </main>
+  
   <footer>
     <p>&copy; 2025 BusStop. Todos os direitos reservados.</p>
   </footer>
 
-  <!-- Script Global Atualizado -->
   <script src="../../assets/js/global.js"></script>
   <script>
-    // Script específico da página de linhas
     document.addEventListener('DOMContentLoaded', function() {
-      const select = document.getElementById("linha");
+      const lineCards = document.querySelectorAll(".line-card");
       const rotaContainer = document.getElementById("rota-container");
+      const rotaPlaceholder = document.getElementById("rota-placeholder");
       const img = document.getElementById("rota");
       const rotas = {
         linha1: "https://placehold.co/800x600/a62828/FFF?text=Rota+da+Linha+1",
@@ -82,21 +103,28 @@
         linha3: "https://placehold.co/800x600/a62828/FFF?text=Rota+da+Linha+3",
         linha4: "https://placehold.co/800x600/a62828/FFF?text=Rota+da+Linha+4"
       };
-      select.addEventListener("change", () => {
-        const rotaEscolhida = rotas[select.value];
-        if (rotaEscolhida) {
-          img.src = rotaEscolhida;
-          rotaContainer.classList.add('visible');
-          img.onload = () => {
-            rotaContainer.scrollIntoView({ behavior: "smooth", block: "center" });
-          };
-        } else {
-          rotaContainer.classList.remove('visible');
-        }
+
+      lineCards.forEach(card => {
+          card.addEventListener("click", () => {
+              lineCards.forEach(c => c.classList.remove('selected'));
+              card.classList.add('selected');
+
+              const lineKey = card.dataset.line;
+              const rotaEscolhida = rotas[lineKey];
+              
+              if (rotaEscolhida) {
+                  rotaContainer.classList.add('visible');
+                  rotaPlaceholder.style.display = 'none';
+                  img.style.display = 'block';
+                  img.src = rotaEscolhida;
+                  img.onload = () => {
+                      rotaContainer.scrollIntoView({ behavior: "smooth", block: "center" });
+                  };
+              }
+          });
       });
     });
   </script>
 </body>
 </html>
-
 

@@ -1,8 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
+  
+  // --- CONFIGURAÇÕES DE SIMULAÇÃO ---
+  // Altere o valor abaixo para definir o tempo do cronômetro do PIX (em segundos).
+  const TIMER_DURATION_SECONDS = 5; 
+  
+  // Altere para 'true' para simular um pagamento bem-sucedido, ou 'false' para simular uma falha/expirado.
+  const SIMULATE_PAYMENT_SUCCESS = true;
+  // ------------------------------------
+
+
   // --- Lógica da Página de Recarga ---
   const valorStep = document.getElementById('valor-step');
   const pixStep = document.getElementById('pix-step');
   const confirmationStep = document.getElementById('confirmation-step');
+  const errorStep = document.getElementById('error-step');
   
   const valueBtns = document.querySelectorAll('.value-btn[data-value]');
   const otherAmountBtn = document.getElementById('other-amount-btn');
@@ -23,22 +34,18 @@ document.addEventListener('DOMContentLoaded', function() {
   function setupPageForUser() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     
-    // Pega os containers principais
     const rechargeContainer = document.getElementById('recharge-container');
     const loggedOutMessage = document.getElementById('logged-out-message');
 
     if (currentUser) {
-        // --- USUÁRIO LOGADO ---
         if(rechargeContainer) rechargeContainer.style.display = 'block';
         if(loggedOutMessage) loggedOutMessage.style.display = 'none';
 
-        // Preenche os dados do usuário
         const cardNumberInput = document.getElementById('card-number');
         const balanceAmountInput = document.getElementById('balance-amount');
         if(cardNumberInput) cardNumberInput.value = currentUser.carteirinha || 'N/A';
         if(balanceAmountInput) balanceAmountInput.value = `R$ ${currentUser.saldo.toFixed(2).replace('.', ',')}`;
     } else {
-        // --- USUÁRIO DESLOGADO ---
         if(rechargeContainer) rechargeContainer.style.display = 'none';
         if(loggedOutMessage) loggedOutMessage.style.display = 'block';
     }
@@ -55,12 +62,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (currentUserJSON) {
         let currentUser = JSON.parse(currentUserJSON);
         const newBalance = currentUser.saldo + rechargeAmount;
-        currentUser.saldo = parseFloat(newBalance.toFixed(2)); // Arredonda para 2 casas decimais
+        currentUser.saldo = parseFloat(newBalance.toFixed(2));
 
-        // Salva o usuário atualizado de volta no localStorage
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
-        // Atualiza o "banco de dados" simulado também para consistência
         if (userDbJSON) {
             let userDb = JSON.parse(userDbJSON);
             const userIndex = userDb.findIndex(user => user.email === currentUser.email);
@@ -114,28 +119,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (customAmountInput) {
       customAmountInput.addEventListener('input', (event) => {
-        // Limita a entrada a no máximo duas casas decimais
-        let value = event.target.value;
-        
-        // Substitui vírgula por ponto para consistência no processamento
-        value = value.replace(',', '.');
-
-        const decimalIndex = value.indexOf('.');
-
-        // Se houver um ponto decimal e mais de dois dígitos depois dele
-        if (decimalIndex !== -1 && value.length - decimalIndex - 1 > 2) {
-            // Trunca a string para ter apenas duas casas decimais
-            event.target.value = value.substring(0, decimalIndex + 3);
+        let value = event.target.value.replace(/[^0-9,]/g, '');
+        const parts = value.split(',');
+        if (parts.length > 2) {
+            value = parts[0] + ',' + parts.slice(1).join('');
         }
-
-        // Continua com a lógica original para atualizar o botão
+        const decimalIndex = value.indexOf(',');
+        if (decimalIndex !== -1 && value.length - decimalIndex - 1 > 2) {
+            value = value.substring(0, decimalIndex + 3);
+        }
+        event.target.value = value;
         selectedValue = 0;
         valueBtns.forEach(btn => btn.classList.remove('selected'));
         if(otherAmountBtn) otherAmountBtn.classList.add('selected');
         updateProceedButton();
       });
 
-      // Formata o valor para duas casas decimais quando o usuário sai do campo
       customAmountInput.addEventListener('blur', (event) => {
         const value = getCustomAmountValue();
         if (value > 0) {
@@ -154,12 +153,21 @@ document.addEventListener('DOMContentLoaded', function() {
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
         display.textContent = minutes + ":" + seconds;
+
         if (--timer < 0) {
             clearInterval(timerInterval);
-            // Pagamento validado: atualiza o saldo e avança para a confirmação
-            updateBalance(finalRechargeValue);
-            pixStep.classList.remove('active');
-            confirmationStep.classList.add('active');
+
+            // Pega o resultado da simulação da variável de configuração
+            const paymentSuccess = SIMULATE_PAYMENT_SUCCESS; 
+
+            if (paymentSuccess) {
+                updateBalance(finalRechargeValue);
+                pixStep.classList.remove('active');
+                confirmationStep.classList.add('active');
+            } else {
+                pixStep.classList.remove('active');
+                errorStep.classList.add('active');
+            }
         }
     }, 1000);
   }
@@ -171,15 +179,21 @@ document.addEventListener('DOMContentLoaded', function() {
           : selectedValue;
 
       if (finalValue > 0) {
-          finalRechargeValue = finalValue; // Armazena o valor para usar na atualização
+          finalRechargeValue = finalValue;
           document.getElementById('pix-amount').textContent = 'R$ ' + finalValue.toFixed(2).replace('.', ',');
           document.getElementById('recharged-amount').textContent = 'R$ ' + finalValue.toFixed(2).replace('.', ',');
           
           valorStep.classList.remove('active');
           pixStep.classList.add('active');
-          const tenMinutes = 10 * 60; // 10 minutos (600 segundos)
+          
           const timerDisplay = document.getElementById('pix-timer');
-          startTimer(tenMinutes, timerDisplay);
+          
+          // Define o valor inicial do timer no HTML para evitar a inconsistência
+          const minutes = Math.floor(TIMER_DURATION_SECONDS / 60).toString().padStart(2, '0');
+          const seconds = (TIMER_DURATION_SECONDS % 60).toString().padStart(2, '0');
+          timerDisplay.textContent = `${minutes}:${seconds}`;
+          
+          startTimer(TIMER_DURATION_SECONDS, timerDisplay);
       }
     });
   }
@@ -196,7 +210,6 @@ document.addEventListener('DOMContentLoaded', function() {
       copyBtn.addEventListener('click', () => {
         const pixCodeInput = document.getElementById('pix-code');
         const feedback = document.getElementById('copy-feedback');
-        // Usa navigator.clipboard.writeText para copiar
         navigator.clipboard.writeText(pixCodeInput.value).then(() => {
             feedback.textContent = 'Copiado!';
             setTimeout(() => { feedback.textContent = ''; }, 2000);
@@ -207,6 +220,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   }
 
-  // Configura a página assim que ela carregar
   setupPageForUser();
 });
+

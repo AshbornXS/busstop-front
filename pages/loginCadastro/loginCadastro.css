@@ -45,9 +45,9 @@ body {
   position: relative;
   overflow: hidden;
   width: 100%;
-  max-width: 780px;
+  max-width: 780px; /* Largura padrão para Etapa 1 */
   min-height: 540px; 
-  transition: max-width 0.6s ease-in-out, min-height 0.6s ease-in-out;
+  transition: max-width 0.6s ease-in-out, min-height 0.6s ease-in-out, padding 0.6s ease-in-out;
 }
 
 .form-wrapper {
@@ -105,30 +105,19 @@ body {
     padding-right: 60px; /* Espaço para o ícone */
 }
 
-/* Estilos para o campo de telefone */
-.phone-group .country-code {
-    position: absolute;
-    left: 50px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #333;
-    font-weight: 500;
-    pointer-events: none;
-    font-size: 1rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* --- CORREÇÃO AQUI --- */
+/* Esconde o ícone de revelar senha padrão do Webkit (Chrome, Edge) */
+input[type="password"]::-webkit-reveal,
+input[type="password"]::-webkit-clear-button {
+    display: none !important;
+    -webkit-appearance: none !important;
 }
-.phone-group .phone-separator {
-    position: absolute;
-    left: 85px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #ddd;
-    pointer-events: none;
-    font-size: 1.2rem;
+/* Esconde o ícone de revelar senha padrão do IE/Edge legado */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
 }
-.phone-group input {
-    padding-left: 105px;
-}
+/* --- FIM DA CORREÇÃO --- */
 
 
 .forgot-password {
@@ -208,6 +197,15 @@ body {
 }
 .overlay-btn:hover { background-color: #fff; color: #a62828; }
 
+/* NOVO: Classe para esconder os formulários durante a animação de sucesso */
+.main-container.registration-complete .form-wrapper,
+.main-container.registration-complete .overlay-container,
+.main-container.registration-complete .personal-info-container {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
 /* ESTILOS PARA O PASSO 2 DO REGISTO */
 .personal-info-container {
     position: absolute;
@@ -226,7 +224,7 @@ body {
     width: 100%;
     opacity: 1;
     visibility: visible;
-    padding: 30px 60px;
+    padding: 30px 50px; /* Padding horizontal reduzido */
 }
 
 .form-description { color: #666; margin-bottom: 20px; font-size: 0.95rem; }
@@ -234,7 +232,7 @@ body {
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 15px; /* Diminuído para caber melhor */
+    gap: 15px; 
     width: 100%;
 }
 
@@ -274,7 +272,7 @@ body {
 }
 
 .main-container.step-two-active {
-    max-width: 980px;
+    max-width: 940px; /* Aumentado para dar espaço */
     min-height: 620px;
 }
 .main-container.step-two-active .overlay-container,
@@ -301,6 +299,7 @@ body {
     cursor: pointer;
     color: #aaa;
     font-size: 1rem;
+    z-index: 3; /* Garante que o nosso ícone fique na frente */
 }
 
 /* ESTILOS PARA A TELA DE SUCESSO */
@@ -311,7 +310,7 @@ body {
     width: 100%;
     height: 100%;
     background-color: #fff;
-    z-index: -1; /* Começa escondido */
+    z-index: -1;
     opacity: 0;
     visibility: hidden;
     display: flex;
@@ -320,14 +319,14 @@ body {
     text-align: center;
     padding: 40px;
     transform: scale(0.9);
-    transition: opacity 0.5s ease, transform 0.5s ease, z-index 0s 0.5s;
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 .success-container.visible {
     opacity: 1;
     visibility: visible;
     transform: scale(1);
-    z-index: 30; /* Fica na frente de tudo */
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 30;
+    transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s; /* Delay para esperar os forms sumirem */
 }
 
 .success-icon {
@@ -341,7 +340,14 @@ body {
     justify-content: center;
     font-size: 2.2rem;
     margin: 0 auto 25px;
+    transform: scale(0);
 }
+
+/* ALTERAÇÃO: Adiciona animação ao ícone quando o container fica visível */
+.success-container.visible .success-icon {
+    animation: check-pop 0.5s ease-out 0.6s forwards; /* Delay para começar depois da transição do container */
+}
+
 .success-content h1 {
     font-size: 2rem;
     margin-bottom: 15px;
@@ -365,5 +371,34 @@ body {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* NOVO: Animação para o ícone de check */
+@keyframes check-pop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    70% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Media Query para o grid da Etapa 2 */
+@media (max-width: 860px) {
+    .form-grid {
+        grid-template-columns: 1fr; /* Muda para coluna única em telas menores */
+    }
+    .main-container.step-two-active {
+        padding-top: 60px; /* Adiciona espaço para o botão 'voltar' não sobrepor o título */
+    }
+    #personalInfoForm {
+        padding: 30px 25px; /* Reduz padding em telas mobile */
+    }
 }
 

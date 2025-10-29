@@ -43,24 +43,47 @@ main {
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
   border-top: 5px solid #a62828;
   position: relative;
+  overflow: hidden; /* Adicionado para conter as animações */
 }
 
 .step-content { display: none; }
 .step-content.active { display: block; }
 
+/* Animação de Entrada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.step-content.active .confirmation-content,
+.step-content.active .error-content {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+
 .step-header { display: flex; align-items: center; gap: 15px; justify-content: center; margin-bottom: 15px; }
 .step-number { background-color: #a62828; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; flex-shrink: 0; }
 .step-title { font-size: 1.8rem; font-weight: 600; color: #333; text-align: center; }
 
-/* Novo Estilo para Display de Saldo e Carteirinha */
+/* Header de Informações (Saldo e Carteirinha) */
+.info-header {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
 .display-group {
     text-align: center;
-    margin-bottom: 25px;
-    padding-bottom: 25px;
-    border-bottom: 1px solid #eee;
-}
-.display-group:last-of-type {
-    margin-bottom: 40px;
 }
 .display-title {
     font-weight: 500;
@@ -113,7 +136,7 @@ main {
 .input-group input:focus { outline: none; border-color: #a62828; box-shadow: 0 0 0 3px rgba(166, 40, 40, 0.2); }
 
 /* Etapa 2: PIX */
-.back-btn { position: absolute; top: 20px; left: 20px; background: #f0f0f0; border: none; width: 40px; height: 40px; border-radius: 50%; color: #a62828; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s; }
+.back-btn { position: absolute; top: 20px; left: 20px; background: #f0f0f0; border: none; width: 40px; height: 40px; border-radius: 50%; color: #a62828; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s; z-index: 2; }
 .back-btn:hover { background-color: #e0e0e0; }
 
 .valor-selecionado { text-align: center; font-size: 1.2rem; color: #333; margin-bottom: 15px; }
@@ -137,6 +160,10 @@ main {
 .confirmation-icon { width: 80px; height: 80px; border-radius: 50%; background-color: #28a745; color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 20px; }
 .confirmation-content p { font-size: 1.1rem; margin-bottom: 10px; }
 .card-info { font-size: 0.9rem; color: #777; margin-bottom: 30px; }
+
+/* Etapa de Erro */
+.error-content { text-align: center; }
+.error-icon { width: 80px; height: 80px; border-radius: 50%; background-color: #dc3545; color: white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 20px; }
 
 /* Botões */
 .submit-btn-container { text-align: center; margin-top: 20px; }
@@ -172,3 +199,4 @@ footer { background-color: #333; color: white; text-align: center; padding: 25px
   .value-options { grid-template-columns: 1fr 1fr; }
   .hero-text h1 { font-size: 2.5rem; }
 }
+

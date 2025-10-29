@@ -74,6 +74,19 @@ main {
 .file-input-label i { color: #a62828; }
 .file-name-display { margin-top: 8px; font-size: 0.9rem; color: #777; padding-left: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+/* NOVO: Aviso de dados faltantes */
+.data-missing-warning {
+    color: #a62828;
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.data-missing-warning a {
+    color: #a62828;
+    font-weight: 700;
+}
+
 .submit-btn-container { text-align: center; margin-top: 40px; }
 .submit-btn-container button { background-color: #a62828; color: white; border: none; padding: 14px 40px; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(166, 40, 40, 0.2); }
 .submit-btn-container button:hover { background-color: #902323; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(166, 40, 40, 0.3); }
@@ -97,4 +110,3 @@ footer { background-color: #333; color: white; text-align: center; padding: 25px
   .step-description { margin-left: 0; }
   .hero-text h1 { font-size: 2.5rem; }
 }
-

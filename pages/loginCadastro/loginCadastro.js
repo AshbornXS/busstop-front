@@ -19,13 +19,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const registerPasswordInput = document.getElementById('register-password');
     const registerConfirmPasswordInput = document.getElementById('register-confirm-password');
 
+    // Informações Pessoais (Etapa 2)
     const nomeInput = document.getElementById('nome');
     const cpfInput = document.getElementById('cpf');
     const telefoneInput = document.getElementById('telefone');
     const cepInput = document.getElementById('cep');
     const enderecoInput = document.getElementById('endereco');
     const numeroInput = document.getElementById('numero');
-    const complementoInput = document.getElementById('complemento');
+    const complementoInput = document.getElementById('complemento'); // Validação adicionada aqui
+    const bairroInput = document.getElementById('bairro');
     const cidadeInput = document.getElementById('cidade');
     const estadoInput = document.getElementById('estado');
 
@@ -94,6 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- LÓGICA DO CADASTRO MULTI-PASSOS ---
+    // (Valida Etapa 1: Email e Senha)
     proceedBtn.addEventListener('click', (e) => {
         e.preventDefault();
         registerError.textContent = '';
@@ -126,43 +129,99 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- MÁSCARAS, VALIDAÇÕES E CONSULTA DE CEP ---
+    
+    // Validação Nome (Etapa 2)
     if(nomeInput) {
         nomeInput.addEventListener('input', (event) => {
             const regex = /[^a-zA-Z\u00C0-\u017F\s]/g;
             event.target.value = event.target.value.replace(regex, '');
         });
     }
+    
+    // Validação Número (Etapa 2)
     if(numeroInput) {
         numeroInput.addEventListener('input', (event) => {
             event.target.value = event.target.value.replace(/\D/g, '');
         });
     }
+    
+    // ATUALIZAÇÃO: Validação Complemento (Etapa 2) - Sem caracteres especiais
     if(complementoInput) {
         complementoInput.addEventListener('input', (event) => {
-            const regex = /[^a-zA-Z\u00C0-\u017F\s]/g;
+            // Permite letras (com acentos), números e espaços
+            const regex = /[^a-zA-Z0-9\u00C0-\u017F\s]/g; 
             event.target.value = event.target.value.replace(regex, '');
         });
     }
+    
+    // Máscara CPF (Etapa 2)
     if(cpfInput) {
         cpfInput.addEventListener('input', (event) => {
             let value = event.target.value.replace(/\D/g, '');
+            if (value.length > 11) { // Limite
+               value = value.substring(0, 11);
+            }
             value = value.replace(/(\d{3})(\d)/, '$1.$2');
             value = value.replace(/(\d{3})(\d)/, '$1.$2');
             value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
             event.target.value = value;
         });
     }
+    
+    // Máscara Telefone (Etapa 2)
     if(telefoneInput) {
+        // NÃO define o valor no load, para o placeholder aparecer
+        // telefoneInput.value = '+55 '; 
+
+        // ADICIONA o '+55 ' quando o usuário clica (focus)
+        telefoneInput.addEventListener('focus', () => {
+            if (telefoneInput.value === '') {
+                telefoneInput.value = '+55 ';
+            }
+        });
+
+        // LIMPA o campo se o usuário clicar fora (blur) sem digitar nada
+        telefoneInput.addEventListener('blur', () => {
+            if (telefoneInput.value === '+55 ') {
+                telefoneInput.value = ''; 
+            }
+        });
+
+        // Lógica da máscara (existente)
         telefoneInput.addEventListener('input', (event) => {
-            let value = event.target.value.replace(/\D/g, '');
-            value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
-            value = value.replace(/(\d{5})(\d)/, '$1-$2');
-            event.target.value = value;
+            let value = event.target.value;
+            if (!value.startsWith('+55 ')) {
+                value = '+55 ';
+            }
+            let numbers = value.substring(4).replace(/\D/g, '');
+            let maskedNumbers = '';
+            if (numbers.length > 0) {
+                maskedNumbers = '(' + numbers.substring(0, 2);
+            }
+            if (numbers.length > 2) {
+                maskedNumbers += ') ' + numbers.substring(2, 7);
+            }
+            if (numbers.length > 7) {
+                maskedNumbers += '-' + numbers.substring(7, 11);
+            }
+            event.target.value = '+55 ' + maskedNumbers;
+        });
+        
+        // Lógica de bloqueio do backspace (existente)
+        telefoneInput.addEventListener('keydown', (event) => {
+            if (event.target.selectionStart <= 4 && (event.key === 'Backspace' || event.key === 'Delete')) {
+                event.preventDefault();
+            }
         });
     }
+    
+    // Máscara e API CEP (Etapa 2)
      if(cepInput) {
         cepInput.addEventListener('input', (event) => {
             let value = event.target.value.replace(/\D/g, '');
+            if (value.length > 8) { // Limite
+               value = value.substring(0, 8);
+            }
             value = value.replace(/^(\d{5})(\d)/, '$1-$2');
             event.target.value = value;
         });
@@ -174,11 +233,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
                 if (!response.ok) throw new Error('Falha na requisição');
                 const data = await response.json();
-                if (data.erro) { personalInfoError.textContent = 'CEP não encontrado.'; return; }
+                if (data.erro) { 
+                    personalInfoError.textContent = 'CEP não encontrado.'; 
+                    enderecoInput.disabled = false;
+                    bairroInput.disabled = false;
+                    cidadeInput.disabled = false;
+                    estadoInput.disabled = false;
+                    return; 
+                }
                 personalInfoError.textContent = ''; 
                 enderecoInput.value = data.logradouro;
+                bairroInput.value = data.bairro;
                 cidadeInput.value = data.localidade;
                 estadoInput.value = data.uf;
+                
+                // Desabilita campos preenchidos pelo CEP
+                enderecoInput.disabled = !!data.logradouro;
+                bairroInput.disabled = !!data.bairro;
+                cidadeInput.disabled = !!data.localidade;
+                estadoInput.disabled = !!data.uf;
+                
             } catch (error) {
                 personalInfoError.textContent = 'Não foi possível buscar o CEP.';
             }
@@ -191,46 +265,71 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             personalInfoError.textContent = '';
             
-            const userDb = getSimulatedUserDb();
-            const cpfExists = userDb.some(user => user.cpf === cpfInput.value);
-
-            if (cpfExists) {
-                personalInfoError.textContent = 'O CPF informado já está cadastrado.';
+            // 1. Validação do Nome (obrigatório)
+            if (nomeInput.value.trim() === '') {
+                personalInfoError.textContent = 'Por favor, preencha o Nome completo.';
                 return;
             }
-
-            if (cpfInput.value.length < 14) { personalInfoError.textContent = 'Por favor, preencha o CPF completo.'; return; }
-            if (telefoneInput.value.length < 15) { personalInfoError.textContent = 'Por favor, preencha o telefone completo.'; return; }
-
-            const inputs = personalInfoForm.querySelectorAll('input[required]');
-            let allFilled = true;
-            inputs.forEach(input => { if (input.value.trim() === '') allFilled = false; });
-
-            if (!allFilled) {
-                personalInfoError.textContent = 'Por favor, preencha todos os dados obrigatórios.';
-            } else {
-                const userData = {
-                    email: registerEmailInput.value,
-                    password: registerPasswordInput.value,
-                    name: nomeInput.value,
-                    cpf: cpfInput.value,
-                    telefone: telefoneInput.value,
-                    cep: cepInput.value,
-                    endereco: enderecoInput.value,
-                    numero: numeroInput.value,
-                    complemento: complementoInput.value,
-                    cidade: cidadeInput.value,
-                    estado: estadoInput.value,
-                };
-                
-                register(userData);
-                
-                if (successMessage) successMessage.classList.add('visible');
-
-                setTimeout(() => {
-                    login(userData.email, userData.password);
-                }, 2500);
+            
+            // 2. Validação do CPF (opcional, mas valida se preenchido)
+            const cpfValor = cpfInput.value.replace(/\D/g, '');
+            if (cpfValor.trim() !== '') {
+                const userDb = getSimulatedUserDb();
+                // Verifica se o CPF já existe
+                const cpfExists = userDb.some(user => user.cpf === cpfValor);
+                if (cpfExists) {
+                    personalInfoError.textContent = 'O CPF informado já está cadastrado.';
+                    return;
+                }
+                if (cpfValor.length < 11) { 
+                    personalInfoError.textContent = 'Por favor, preencha o CPF completo.'; 
+                    return; 
+                }
             }
+
+            // 3. Validação do Telefone (opcional, mas valida se preenchido)
+            const telefoneValor = telefoneInput.value;
+            // CORREÇÃO: Verifica se o valor é diferente de VAZIO ou do prefixo E se é menor que 19
+            if (telefoneValor !== '' && telefoneValor !== '+55 ' && telefoneValor.length < 19) { 
+                personalInfoError.textContent = 'Por favor, preencha o telefone completo.'; 
+                return; 
+            }
+            
+            // 4. Validação do CEP (opcional, mas valida se preenchido)
+            const cepValor = cepInput.value.replace(/\D/g, '');
+            if (cepValor.trim() !== '' && cepValor.length < 8) { 
+                personalInfoError.textContent = 'Por favor, preencha o CEP completo.'; 
+                return; 
+            }
+            
+            // Coleta de dados (Nome da Etapa 2)
+            const userData = {
+                email: registerEmailInput.value,
+                password: registerPasswordInput.value,
+                name: nomeInput.value,
+                cpf: cpfValor, // Salva sem máscara
+                // CORREÇÃO: Salva o telefone apenas se ele foi realmente preenchido
+                telefone: (telefoneValor !== '+55 ' && telefoneValor !== '') ? telefoneInput.value : '',
+                cep: cepValor, // Salva sem máscara
+                endereco: enderecoInput.value,
+                numero: numeroInput.value,
+                complemento: complementoInput.value,
+                bairro: bairroInput.value,
+                cidade: cidadeInput.value,
+                estado: estadoInput.value,
+            };
+            
+            register(userData);
+            
+            mainContainer.classList.add('registration-complete');
+            if (successMessage) {
+                successMessage.style.display = 'flex';
+                setTimeout(() => successMessage.classList.add('visible'), 50);
+            }
+
+            setTimeout(() => {
+                login(userData.email, userData.password);
+            }, 2000);
         });
     }
     
@@ -268,12 +367,13 @@ function getSimulatedUserDb() {
             email: 'user@test.com',
             password: '1234',
             name: 'Usuário de Teste',
-            cpf: '123.456.789-00',
-            telefone: '(11) 98765-4321',
-            cep: '01001-000',
+            cpf: '12345678900', // Salvo sem máscara
+            telefone: '+55 (11) 98765-4321',
+            cep: '01001000', // Salvo sem máscara
             endereco: 'Praça da Sé',
             numero: '1',
             complemento: 'Lado ímpar',
+            bairro: 'Sé', // Bairro adicionado ao usuário padrão
             cidade: 'São Paulo',
             estado: 'SP',
             carteirinha: '12345',
@@ -307,6 +407,18 @@ function register(userData) {
     const userDb = getSimulatedUserDb();
     userData.carteirinha = Math.floor(10000 + Math.random() * 90000).toString();
     userData.saldo = 0.00;
+    
+    // Garante que campos opcionais vazios sejam salvos como strings vazias
+    userData.cpf = userData.cpf || '';
+    userData.telefone = userData.telefone || ''; // Já deve ser string vazia se não preenchido
+    userData.cep = userData.cep || '';
+    userData.endereco = userData.endereco || '';
+    userData.numero = userData.numero || '';
+    userData.complemento = userData.complemento || '';
+    userData.bairro = userData.bairro || '';
+    userData.cidade = userData.cidade || '';
+    userData.estado = userData.estado || '';
+
     userDb.push(userData);
     localStorage.setItem('simulatedUserDb', JSON.stringify(userDb));
 }

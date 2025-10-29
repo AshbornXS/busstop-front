@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recuperar Senha - BusStop</title>
+    <!-- Carrega o global.css (para o estilo do toast) e o CSS específico -->
+    <link rel="stylesheet" href="../../assets/css/global.css"> 
     <link rel="stylesheet" href="esqueceuSenha.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
 
+    <!-- Estrutura original com a logo da marca -->
     <div class="brand-logo">
         <a href="../index/index.html" class="logo-link">
             <i class="fa-solid fa-bus"></i>
@@ -16,13 +19,15 @@
         </a>
     </div>
 
+    <!-- Container do formulário -->
     <div class="forgot-password-container">
         <form id="forgotPasswordForm" class="auth-form">
             <h1>Recuperar Senha</h1>
             <p class="form-description">Não se preocupe! Digite seu e-mail abaixo e enviaremos um link para você criar uma nova senha.</p>
             <div class="input-group">
               <i class="fa-solid fa-envelope input-icon"></i>
-              <input type="email" id="email-forgot" placeholder="Digite seu e-mail" required>
+              <!-- LIMITE ADICIONADO AQUI -->
+              <input type="email" id="email-forgot" placeholder="Digite seu e-mail" required maxlength="100">
             </div>
             <button type="submit" class="submit-btn">Enviar Link de Recuperação</button>
             <a href="../loginCadastro/loginCadastro.html#login" class="back-to-login">
@@ -31,16 +36,8 @@
         </form>
     </div>
 
-    <script>
-        document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('email-forgot').value;
-            if (email) {
-                alert('Se o e-mail ' + email + ' estiver cadastrado, você receberá um link para redefinir sua senha em breve.');
-                this.reset();
-            }
-        });
-    </script>
-
+    <!-- Script removido daqui e movido para esqueceuSenha.js -->
+    <script src="esqueceuSenha.js"></script>
 </body>
 </html>
+

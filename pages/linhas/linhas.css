@@ -1,101 +1,130 @@
-/* ESTILOS ESPECÍFICOS PARA A PÁGIA DE LINHAS */
+/* ESTILOS ESPECÍFICOS PARA A PÁGINA DE LINHAS */
 
-/* Seção Hero */
 .hero {
-  background-color: #a62828;
-  padding: 80px 40px;
+  background: linear-gradient(to right, rgba(166, 40, 40, 0.9), rgba(166, 40, 40, 0.7)), url(https://placehold.co/1920x1080/444/fff?text=Mapa+de+Rotas) no-repeat center center/cover;
+  padding: 60px 40px;
   text-align: center;
   color: white;
 }
+.hero-text h1 { font-size: 3rem; font-weight: 700; margin-bottom: 10px; }
+.hero-text p { font-size: 1.1rem; max-width: 600px; margin: 0 auto; opacity: 0.9; }
 
-.hero-text h1 {
-  font-size: 3.2rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.hero-text p {
-  font-size: 1.1rem;
-  max-width: 600px;
+.content-section { padding: 60px 20px; }
+.lines-container {
+  max-width: 1100px;
   margin: 0 auto;
-  opacity: 0.9;
-}
-
-/* Seção de conteúdo principal */
-.content-section {
-  padding: 60px 20px;
-}
-
-.box-linhas {
-  background-color: #ffffff;
-  border-radius: 15px;
-  padding: 50px;
-  max-width: 900px;
-  margin: 0 auto;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
   text-align: center;
 }
 
-.box-linhas h2 {
-  color: #333;
-  font-size: 2.2rem;
-  font-weight: 600;
+.lines-header {
   margin-bottom: 40px;
 }
 
-.box-linhas label {
-  display: block;
-  margin-bottom: 15px;
-  font-weight: 500;
-  color: #555;
-  font-size: 1.2rem;
+.lines-header h2 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
 }
 
-/* Estilo do Seletor de Linhas */
-#linha {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-color: #f8f9fa;
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23a62828%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1.5rem center;
-  background-size: 0.8rem;
-  color: #333;
-  padding: 15px 45px 15px 25px;
-  border-radius: 50px;
-  border: 1px solid #ddd;
+.lines-header p {
   font-size: 1.1rem;
-  font-weight: 500;
+  color: #666;
+}
+
+/* Estilos dos Cards de Linha */
+.line-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  margin-bottom: 50px;
+}
+
+.line-card {
+  background-color: #ffffff;
+  border: 1px solid #eee;
+  border-radius: 15px;
+  padding: 25px;
+  text-align: left;
   cursor: pointer;
   transition: all 0.3s ease;
-  width: 100%;
-  max-width: 450px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
-#linha:hover {
+.line-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
   border-color: #a62828;
-  box-shadow: 0 0 10px rgba(166, 40, 40, 0.1);
 }
 
-#linha:focus {
-  outline: none;
+.line-card.selected {
+  background-color: #a62828;
+  color: white;
   border-color: #a62828;
-  box-shadow: 0 0 0 3px rgba(166, 40, 40, 0.2);
+  box-shadow: 0 8px 20px rgba(166, 40, 40, 0.25);
+  transform: translateY(-5px);
 }
 
-/* Container da Imagem */
+.line-card .line-number {
+  background-color: rgba(166, 40, 40, 0.1);
+  color: #a62828;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 10px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.line-card.selected .line-number {
+  background-color: white;
+  color: #a62828;
+}
+
+.line-card .line-name {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Container da Rota */
 .rota-container {
   margin-top: 40px;
   width: 100%;
-  max-width: 800px;
-  display: none; /* Começa escondido */
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
+  border-radius: 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #eee;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#rota-placeholder {
+    color: #aaa;
+    text-align: center;
+}
+#rota-placeholder i {
+    font-size: 4rem;
+    margin-bottom: 20px;
+}
+#rota-placeholder p {
+    font-size: 1.2rem;
+    font-weight: 500;
 }
 
 .rota-container.visible {
-  display: block;
   opacity: 1;
 }
 
@@ -103,18 +132,13 @@
   width: 100%;
   height: auto;
   border-radius: 15px;
-  border: 1px solid #eee;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
 /* Responsividade */
 @media (max-width: 768px) {
-  .hero-text h1 {
-    font-size: 2.5rem;
-  }
-  .box-linhas {
-    padding: 30px;
-  }
-  .box-linhas h2 {
-    font-size: 1.8rem;
-  }
+  .lines-header h2 { font-size: 2rem; }
+  .line-cards-container { grid-template-columns: 1fr; }
+  .hero-text h1 { font-size: 2.5rem; }
 }
+

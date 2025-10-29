@@ -29,8 +29,8 @@
       <a href="../linhas/linhas.html">Linhas</a>
     </nav>
     <div class="right-nav">
-      <div class="user-icon-wrapper dropdown">
-        <div class="user-icon" id="user-btn">
+      <div class="user-icon-wrapper dropdown" id="user-btn">
+        <div class="user-icon">
           <i class="fa-regular fa-user"></i>
         </div>
         <div class="dropdown-content" id="user-content">
@@ -86,9 +86,13 @@
                   <i class="fa-solid fa-location-dot input-icon"></i>
                   <input type="text" id="cep" placeholder="CEP" disabled>
                 </div>
-                <div class="input-group full-width">
+                <div class="input-group">
                   <i class="fa-solid fa-map-marker-alt input-icon"></i>
                   <input type="text" id="endereco" placeholder="Endereço" disabled>
+                </div>
+                 <div class="input-group">
+                  <i class="fa-solid fa-map-pin input-icon"></i>
+                  <input type="text" id="bairro" placeholder="Bairro" disabled>
                 </div>
                  <div class="input-group">
                   <i class="fa-solid fa-hashtag input-icon"></i>
@@ -125,7 +129,7 @@
                           <i class="fa-solid fa-school"></i>
                           <span>Declaração da Escola</span>
                       </label>
-                      <input type="file" id="declaracao" accept=".pdf,.jpg,.png" required>
+                      <input type="file" id="declaracao" accept="image/*,application/pdf" required>
                       <span class="file-name-display" data-for="declaracao">Nenhum arquivo selecionado</span>
                   </div>
                   <div class="file-input-wrapper">
@@ -133,13 +137,16 @@
                           <i class="fa-solid fa-home"></i>
                           <span>Comprovante de Residência</span>
                       </label>
-                      <input type="file" id="comprovante" accept=".pdf,.jpg,.png" required>
+                      <input type="file" id="comprovante" accept="image/*,application/pdf" required>
                       <span class="file-name-display" data-for="comprovante">Nenhum arquivo selecionado</span>
                   </div>
               </div>
             </div>
 
             <div class="submit-btn-container">
+              <!-- NOVO: Aviso de dados faltantes -->
+              <p id="data-missing-warning" class="data-missing-warning" style="display: none;"></p>
+              
               <button type="submit" id="submit-btn" disabled>Enviar para Renovação</button>
             </div>
           </form>
@@ -164,4 +171,3 @@
   <script src="renovacao.js"></script>
 </body>
 </html>
-

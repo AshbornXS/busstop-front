@@ -20,10 +20,20 @@
   border-top: 5px solid #a62828;
 }
 
-/* Novo Estilo para Display de Saldo */
+/* Header de Informações (Saldo e Carteirinha) */
+.info-header {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
 .display-group {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 0; 
 }
 .display-title {
     font-weight: 500;
@@ -84,30 +94,18 @@
     color: #6c757d;
 }
 
-/* Estilos para o campo de telefone */
-.phone-group .country-code {
-    position: absolute;
-    left: 50px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #333;
-    font-weight: 500;
-    pointer-events: none;
-    font-size: 1rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* --- CORREÇÃO 1: Esconde o "olho" padrão do navegador --- */
+input[type="password"]::-webkit-reveal,
+input[type="password"]::-webkit-clear-button {
+    display: none !important;
+    -webkit-appearance: none !important;
 }
-.phone-group .phone-separator {
-    position: absolute;
-    left: 85px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #ddd;
-    pointer-events: none;
-    font-size: 1.2rem;
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
 }
-.phone-group input {
-    padding-left: 105px;
-}
+/* --- FIM DA CORREÇÃO 1 --- */
+
 
 /* Botão de ver senha */
 .password-toggle-btn {
@@ -122,6 +120,7 @@
     font-size: 1rem;
     padding: 0;
     line-height: 1;
+    z-index: 3;
 }
 .password-toggle-btn:focus {
     outline: none;
@@ -131,18 +130,18 @@
 .form-message {
   text-align: center;
   margin-top: 15px;
-  margin-bottom: -15px; /* Compensa o padding-bottom do .step */
+  margin-bottom: -15px;
   font-weight: 500;
   height: 20px;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.5s ease;
   opacity: 0;
 }
 .form-message.success {
-  color: #28a745; /* Verde */
+  color: #28a745;
   opacity: 1;
 }
 .form-message.error {
-  color: #dc3545; /* Vermelho */
+  color: #dc3545;
   opacity: 1;
 }
 
@@ -184,6 +183,22 @@
     background-color: #5a6268;
 }
 
+/* --- CORREÇÃO 2: Estilo do link "Esqueceu a Senha" --- */
+.forgot-password-link {
+  display: block;
+  text-align: right;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #a62828; /* Cor alterada para vermelho */
+  text-decoration: none;
+  font-weight: 500; /* Peso adicionado */
+}
+.forgot-password-link:hover {
+  text-decoration: underline;
+  color: #902323; /* Escurece no hover */
+}
+/* --- FIM DA CORREÇÃO 2 --- */
+
 /* Responsividade Específica */
 @media (max-width: 768px) {
   .main-card { padding: 30px 25px; }
@@ -192,5 +207,45 @@
   .step-description { margin-left: 0; }
   .hero-text h1 { font-size: 2.5rem; }
   .action-buttons { flex-direction: column; }
+  .forgot-password-link { text-align: center; } /* Centraliza em telas pequenas */
+}
+
+/* Estilos de Acesso Restrito (Atualizado) */
+.access-restricted {
+    text-align: center;
+    padding: 40px 50px;
+}
+.access-restricted .restricted-icon {
+    font-size: 3rem;
+    color: #a62828;
+    margin-bottom: 25px;
+}
+.access-restricted h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+.access-restricted p {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+.access-restricted .restricted-action-btn {
+    background-color: #a62828;
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+.access-restricted .restricted-action-btn:hover {
+    background-color: #902323;
+    transform: translateY(-2px);
 }
 
